@@ -44,10 +44,13 @@ const login = async (req, res) => {
             return res.status(401).json({ message: "Incorrect Credentials" });
         }
         authenticateUser(req, user)
-            .then(() => { return res.status(200).json({ message: "Login Success!" }) });
+            .then( async () => { 
+                user = await User.findById(req.session.userID).select("-password -__v -_id");
+                return res.status(200).json({ message: "Login Success!", user }) 
+            });
     }
     catch (err) {
-        return res.status(500).json({ error: "Internal Server Error " + err.message });
+        return res.status(500).json({ message: err.message });
     }
 }
 

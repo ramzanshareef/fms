@@ -12,7 +12,8 @@ const dashboard = async (req, res) => {
                 const numAcceptedDonations = await Donation.countDocuments({ status: "accepted" });
                 const numRejectedDonations = await Donation.countDocuments({ status: "rejected" });
                 const numCollectedDonations = await Donation.countDocuments({ status: "collected" });
-                return res.status(200).json({ numPendingDonations, numAssignedDonations, numAcceptedDonations, numRejectedDonations, numCollectedDonations });
+                const numTotalDonations = await Donation.countDocuments();
+                return res.status(200).json({ numPendingDonations, numAssignedDonations, numAcceptedDonations, numRejectedDonations, numCollectedDonations, numTotalDonations });
             }
             catch (err) {
                 return res.status(500).json({ error: "Internal Server Error " + err.message });

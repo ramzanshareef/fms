@@ -8,9 +8,9 @@ const getDonor = (req, res) => {
         isDonor(req, res, async () => {
             try {
                 let donorID = req.session.userID;
-                let user = await User.findById(donorID).select("-password -__v -_id");
+                let donor = await User.findById(donorID).select("-password -__v -_id");
                 let donations = await Donation.find({ donor: donorID }).select("-_id -__v -donor");
-                return res.status(200).json({ user, donations });
+                return res.status(200).json({ donor, donations });
             }
             catch (err) {
                 return res.status(500).json({ error: "Internal Server Error " + err.message });
@@ -53,6 +53,12 @@ const editUser = async (req, res) => {
     try {
         const userID = req.session.userID;
         const updateFields = {};
+        if (req.body.name) {
+            updateFields.name = req.body.name;
+        }
+        if (req.body.email) {
+            updateFields.email = req.body.email;
+        }
         if (req.body.gender) {
             updateFields.gender = req.body.gender;
         }
@@ -64,7 +70,7 @@ const editUser = async (req, res) => {
         }
         await User.findByIdAndUpdate(userID, updateFields);
         const user = await User.findById(userID).select("-_id -password -__v");
-        return res.status(200).json({ user });
+        return res.status(200).json({ donor: user });
     }
     catch (err) {
         return res.status(500).json({ error: "Internal Server Error " + err.message });
