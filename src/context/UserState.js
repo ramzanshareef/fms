@@ -35,7 +35,7 @@ const UserState = (props) => {
                 const jsonData = await response.json();
                 return jsonData;
             }
-            return response
+            return response;
         }
     }
 

@@ -1,4 +1,4 @@
-# Getting Started with Food 
+# Getting Started with Food Management System
 
 ## Do this before running the Application
 
