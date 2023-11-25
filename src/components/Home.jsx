@@ -3,10 +3,13 @@ import { userContext } from "../context/UserState";
 import { Link } from "react-router-dom";
 
 const Home = () => {
+    const isAuthenticated = document.cookie.includes("isAuthenticated=true");
     const context = useContext(userContext);
     let { getUser } = context;
     let [user, setUser] = useState({});
+    
     useEffect(() => {
+        document.title = "Home | FMS";
         getUser()
             .then((data) => {
                 setUser(data);
@@ -15,10 +18,10 @@ const Home = () => {
 
     return (
         <>
-            {document.cookie.includes("isAuthenticated=true")
+            { isAuthenticated
                 ?
                 <div className="w-4/5 mx-auto my-2 p-2">
-                    <p>This is your authenticated website of {user.name} </p>
+                    <p>This is your authenticated website of {user.name} ({user.role}) </p>
                 </div>
                 :
                 <div className="flex justify-center items-center h-screen">

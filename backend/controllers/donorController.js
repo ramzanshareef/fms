@@ -14,12 +14,14 @@ const dashboard = async (req, res) => {
                 const numAssignedDonations = await Donation.countDocuments({ donor: donorID, status: "assigned" });
                 const numCollectedDonations = await Donation.countDocuments({ donor: donorID, status: "collected" });
                 const numRejectedDonations = await Donation.countDocuments({ donor: donorID, status: "rejected" });
+                const totalDonations = numPendingDonations + numAcceptedDonations + numAssignedDonations + numCollectedDonations + numRejectedDonations;    
                 return res.status(200).json({
                     numPendingDonations,
                     numAcceptedDonations,
                     numAssignedDonations,
                     numCollectedDonations,
-                    numRejectedDonations
+                    numRejectedDonations,
+                    totalDonations
                 });
             }
             catch (err) {

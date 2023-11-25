@@ -112,7 +112,7 @@ const EditProfile = ({ isOpen, onClose, user }) => {
                             className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
                             onClick={handleSaveProfile}
                         >
-                            Save
+                            Update
                         </button>
                     </div>
                     <LoginError showError={showError} error={error} onClose={()=> setShowError(false)} />

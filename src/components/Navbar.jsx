@@ -7,17 +7,23 @@ import ProfileLogo from "../images/ProfileLogo";
 const backendURL = process.env.REACT_APP_BACKEND_URL;
 
 const Navbar = () => {
+    const isAuthenticated = document.cookie.includes("isAuthenticated=true");
+    const isDonor = document.cookie.includes("isdonor=true");
+    const isAdmin = document.cookie.includes("isadmin=true");
+    const isAgent = document.cookie.includes("isagent=true");
     let location = useLocation();
     const nav = useNavigate();
     const context = useContext(userContext);
     let { getUser } = context;
     let [user, setUser] = useState({});
+
     useEffect(() => {
         getUser()
             .then((data) => {
                 setUser(data);
             })
     }, []);
+
     const handleLogOut = async (e) => {
         e.preventDefault();
         const response = await fetch(backendURL + "/auth/logout", {
@@ -37,6 +43,7 @@ const Navbar = () => {
             console.log(jsonData.message);
         }
     }
+
     return (
         <nav className="sticky top-0 z-10 p-1 bg-gray-800 text-gray-400">
             <div className="flex flex-row justify-between items-center">
@@ -47,15 +54,33 @@ const Navbar = () => {
                     <li className="list-none m-2 cursor-pointer">
                         <Link to={"/"} className={`${location.pathname === "/" ? "text-white" : ""}`}>Home</Link>
                     </li>
-                    {(document.cookie.includes("isAuthenticated=true"))
+                    {isAuthenticated
                         ? <>
                             <li className="list-none m-2 cursor-pointer">
                                 <Link to={"/about"} className={`${location.pathname === "/about" ? "text-white" : ""}`}>About</Link>
                             </li>
+                            <li className="list-none m-2 cursor-pointer">
+                                <Link to={"/dashboard"} className={`${location.pathname === "/dashboard" ? "text-white" : ""}`}>Dashboard</Link>
+                            </li>
+                            {isDonor
+                                ?
+                                <>
+                                    <li className="list-none m-2 cursor-pointer">
+                                        <Link to={"/donate"} className={`${location.pathname === "/donate" ? "text-white" : ""}`}>Donate</Link>
+                                    </li>
+                                    <li className="list-none m-2 cursor-pointer">
+                                        <Link to={"/donations/pending"} className={`${location.pathname === "/donations/pending" ? "text-white" : ""}`}>Pending Donations</Link>
+                                    </li>
+                                    <li className="list-none m-2 cursor-pointer">
+                                        <Link to={"/donations/previous"} className={`${location.pathname === "/donations/previous" ? "text-white" : ""}`}>Previous Donations</Link>
+                                    </li>
+                                </>
+                                : null
+                            }
                         </> : <></>}
                 </div>
                 <div>
-                    {document.cookie.includes("isAuthenticated=true")
+                    {isAuthenticated
                         ? <>
                             <span className="flex w-fit items-center">
                                 <Link to="/about" >

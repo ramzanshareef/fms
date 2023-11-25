@@ -22,8 +22,25 @@ const UserState = (props) => {
         }
     }
 
+    const dashboardDetails = async () => {
+        if (isAuthenticated === true) {
+            const response = await fetch(backendURL + "/user/" + role + "/dashboard", {
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            if (response.status === 200){
+                const jsonData = await response.json();
+                return jsonData;
+            }
+            return response
+        }
+    }
+
     return (
-        <userContext.Provider value={{ getUser, user }}>
+        <userContext.Provider value={{ getUser, user, dashboardDetails }}>
             {props.children}
         </userContext.Provider>
     );
