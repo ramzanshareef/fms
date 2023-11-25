@@ -26,10 +26,10 @@ const About = () => {
             {isAuthenticated
                 ? (
                     <>
-                        <div>
+                        <div className="w-3/5 mx-auto my-5 p-4 border border-blue-400">
                             This is the authenticated session of <i><b>{user.name}</b></i> with email <i><b>{user.email}</b></i> who is a <i><b>{user.role}</b></i> <br />
-                            <div className="flex items-center justify-center">
-                                <button onClick={handleEditProfile} className="rounded-sm mx-2 px-2 py-1 cursor-pointer bg-blue-600 text-white hover:bg-blue-500">Edit Profile</button>
+                            <div className="flex items-center justify-center m-4">
+                                <button onClick={handleEditProfile} className="rounded-lg mx-2 px-2 py-1 cursor-pointer bg-blue-600 text-white hover:bg-blue-500">Edit Profile</button>
                             </div>
                         </div>
                         <EditProfile isOpen={isEditProfileOpen} onClose={()=> setIsEditProfileOpen(false)} user={user} />

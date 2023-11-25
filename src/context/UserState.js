@@ -39,8 +39,26 @@ const UserState = (props) => {
         }
     }
 
+    const addDonation = async (donation) => {
+        if (isAuthenticated === true) {
+            const response = await fetch(backendURL + "/user/donor/donation", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(donation)
+            });
+            if (response.status === 200){
+                const jsonData = await response.json();
+                return jsonData;
+            }
+            return response;
+        }
+    }
+
     return (
-        <userContext.Provider value={{ getUser, user, dashboardDetails }}>
+        <userContext.Provider value={{ getUser, user, dashboardDetails, addDonation }}>
             {props.children}
         </userContext.Provider>
     );

@@ -124,4 +124,4 @@ const EditProfile = ({ isOpen, onClose, user }) => {
     );
 };
 
-export default EditProfile
+export default EditProfile;
