@@ -175,6 +175,18 @@ const Navbar = () => {
                                     </li>
                                 </>
                             )}
+                            {isAgent && (
+                                <>
+                                    <li className="list-none m-2 cursor-pointer hover:text-white">
+                                        <Link
+                                            to={"/donations"}
+                                            className={`${location.pathname === "/donations" ? "text-white" : ""}`}
+                                        >
+                                            Donations
+                                        </Link>
+                                    </li>
+                                </>
+                            )}
                         </div>
                     )}
                     <div className="lg:hidden flex flex-col items-center">

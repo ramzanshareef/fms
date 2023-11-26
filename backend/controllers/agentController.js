@@ -26,7 +26,7 @@ const showDonations = async (req, res) => {
         isAgent(req, res, async () => {
             try {
                 const agentID = req.session.userID;
-                const donations = await Donation.find({ agent: agentID }).select("donor foodName status");
+                const donations = await Donation.find({ agent: agentID }).populate("donor", "name email");
                 return res.status(200).json({ donations });
             }
             catch (err) {
