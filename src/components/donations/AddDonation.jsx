@@ -5,7 +5,7 @@ const AddDonation = () => {
     const isAuthenticated = document.cookie.includes("isAuthenticated=true");
     const isDonor = document.cookie.includes("isdonor=true");
 
-    const [data, setData] = useState({ "foodName": "", "foodQuantity": 0, "cookingTime": "", "address": "", "donorToAdminMsg": "" });
+    const [data, setData] = useState({ "foodName": "", "foodQuantity": 0, "cookingTime": "", "address": "", "donorToAdminMsg": undefined });
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value });
     }
@@ -16,12 +16,11 @@ const AddDonation = () => {
         console.log(data);
         addDonation(data)
             .then((res) => {
-                console.log(res);
-                alert("Donation added successfully");
+                alert("Donation Added Successfully");
             })
             .catch((err) => {
                 console.log(err);
-                alert("Donation not added");
+                alert("Error, Check console for more details");
             });
     };
 
@@ -39,6 +38,7 @@ const AddDonation = () => {
                         onChange={handleChange}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Enter food name"
+                        required
                     />
                 </div>
                 <div className="mb-4">
@@ -52,6 +52,7 @@ const AddDonation = () => {
                         onChange={handleChange}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Enter food quantity"
+                        required
                     />
                 </div>
                 <div className="mb-4">
@@ -65,6 +66,7 @@ const AddDonation = () => {
                         onChange={handleChange}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Enter cooking time"
+                        required
                     />
                 </div>
                 <div className="mb-4">
@@ -78,6 +80,7 @@ const AddDonation = () => {
                         onChange={handleChange}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Enter address"
+                        required
                     />
                 </div>
                 <div className="mb-4">

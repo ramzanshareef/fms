@@ -15,7 +15,7 @@ const dashboard = async (req, res) => {
                 return res.status(200).json({ numAssignedDonations, numAcceptedDonations, numRejectedDonations, numCollectedDonations });
             }
             catch (err) {
-                return res.status(500).json({ error: "Internal Server Error " + err.message });
+                return res.status(500).json({ message: "Internal Server Error " + err.message });
             }
         });
     });
@@ -30,7 +30,7 @@ const showDonations = async (req, res) => {
                 return res.status(200).json({ donations });
             }
             catch (err) {
-                return res.status(500).json({ error: "Internal Server Error " + err.message });
+                return res.status(500).json({ message: "Internal Server Error " + err.message });
             }
         });
     });
@@ -54,7 +54,7 @@ const agentAcceptance = async (req, res) => {
                 return res.status(200).json({ message: "Donation status updated" });
             }
             catch (err) {
-                return res.status(500).json({ error: "Internal Server Error " + err.message });
+                return res.status(500).json({ message: "Internal Server Error " + err.message });
             }
         });
     });
@@ -78,7 +78,7 @@ const collectDonation = async (req, res) => {
                 return res.status(200).json({ message: "Donation collected" });
             }
             catch (err) {
-                return res.status(500).json({ error: "Internal Server Error " + err.message });
+                return res.status(500).json({ message: "Internal Server Error " + err.message });
             }
         });
     });

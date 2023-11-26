@@ -13,7 +13,7 @@ const getDonor = (req, res) => {
                 return res.status(200).json({ donor, donations });
             }
             catch (err) {
-                return res.status(500).json({ error: "Internal Server Error " + err.message });
+                return res.status(500).json({ message: "Internal Server Error " + err.message });
             }
         });
     });
@@ -28,7 +28,7 @@ const getAdminUser = (req, res) => {
                 return res.status(200).json({ admin });
             }
             catch (err) {
-                return res.status(500).json({ error: "Internal Server Error " + err.message });
+                return res.status(500).json({ message: "Internal Server Error " + err.message });
             }
         });
     });
@@ -43,7 +43,7 @@ const getAgentUser = (req, res) => {
                 return res.status(200).json({ agent });
             }
             catch (err) {
-                return res.status(500).json({ error: "Internal Server Error " + err.message });
+                return res.status(500).json({ message: "Internal Server Error " + err.message });
             }
         });
     });
@@ -73,7 +73,7 @@ const editUser = async (req, res) => {
         return res.status(200).json({ donor: user });
     }
     catch (err) {
-        return res.status(500).json({ error: "Internal Server Error " + err.message });
+        return res.status(500).json({ message: "Internal Server Error " + err.message });
     }
 }
 

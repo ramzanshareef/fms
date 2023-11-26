@@ -12,7 +12,7 @@ const Signup = () => {
     const [showSingupError, setShowSingupError] = useState(false);
     const [errors, setErrors] = useState([]);
     let [user, setUser] = useState({});
-    let { getUser } = context;
+    let { signup, getUser } = context;
 
     useEffect(() => {
         getUser()
@@ -27,28 +27,25 @@ const Signup = () => {
 
     const handleSignup = async (e) => {
         e.preventDefault();
-        const response = await fetch(backendURL + "/auth/signup", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ name: credentials.name, email: credentials.email, password: credentials.password, role: credentials.role })
-        });
-        const jsonData = await response.json();
-        if (response.status === 200) {
-            nav("/login");
-            window.location.reload();
-        }
-        else {
-            if (jsonData.errors) {
-                setErrors(jsonData.errors);
+        await signup(credentials)
+            .then((data) => {
+                if (data.errors) {
+                    setErrors(data.errors);
+                    setShowSingupError(true);
+                }
+                else if (data.user) {
+                    setErrors([{"msg": "This email is already registered"}]);
+                    setShowSingupError(true);
+                }
+                else {
+                    nav("/login");
+                    window.location.reload();
+                }
+            })
+            .catch((err)=> {
+                setErrors([{"msg": err.message}]);
                 setShowSingupError(true);
-            }
-            else {
-                console.log(jsonData.message);
-            }
-        }
+            })
     }
     
     return (

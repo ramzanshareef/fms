@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { userContext } from "../context/UserState";
 import ProfileLogo from "../images/ProfileLogo";
-
-const backendURL = process.env.REACT_APP_BACKEND_URL;
 
 const Navbar = () => {
     const isAuthenticated = document.cookie.includes("isAuthenticated=true");
@@ -15,8 +13,10 @@ const Navbar = () => {
     const location = useLocation();
     const nav = useNavigate();
     const context = useContext(userContext);
-    const { getUser } = context;
+    const { logout, getUser } = context;
     const [user, setUser] = useState({});
+    const navbarRef = useRef(null);
+
 
     useEffect(() => {
         getUser().then((data) => {
@@ -24,30 +24,38 @@ const Navbar = () => {
         });
     }, []);
 
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (navbarRef.current && !navbarRef.current.contains(event.target)) {
+                setIsMenuOpen(false);
+            }
+        };
+        document.addEventListener("click", handleOutsideClick);
+        return () => {
+            document.removeEventListener("click", handleOutsideClick);
+        };
+    }, []);
+
     const handleLogOut = async (e) => {
         e.preventDefault();
-        const response = await fetch(backendURL + "/auth/logout", {
-            method: "POST",
-            credentials: "include",
-        });
-        const jsonData = await response.json();
-        if (response.status === 200) {
-            document.cookie.split(";").forEach((cookie) => {
-                document.cookie = cookie
-                    .replace(/^ +/, "")
-                    .replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
-            });
-            nav("/login");
-            window.location.reload();
-        } else {
-            console.log(jsonData.message);
-        }
+        logout()
+            .then((data) => {
+                if (data.message === "Logout Success!") {
+                    document.cookie.split(";").forEach((cookie) => {
+                        document.cookie = cookie
+                            .replace(/^ +/, "")
+                            .replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
+                    });
+                    nav("/login");
+                    window.location.reload();
+                }
+            })
     };
 
     return (
-        <nav className="sticky top-0 z-10 p-1 bg-gradient-to-r from-purple-700 to-indigo-500">
-            <div className={`justify-between items-center ${isMenuOpen? "flex flex-col ": "flex flex-row "}`}>
-                <div className="flex flex-row items-center">
+        <nav ref={navbarRef} className="sticky w-full top-0 z-10 p-2 bg-gradient-to-r from-purple-700 to-indigo-500">
+            <div className={`justify-between items-center ${isMenuOpen ? "flex flex-col items-center text-center lg:flex lg:flex-row" : "lg:flex lg:flex-row"}`}>
+                <div className={`flex flex-row items-center` + isMenuOpen ? "w-full flex flex-row justify-between items-center lg:w-fit" : ""}>
                     <li className="list-none m-2 cursor-pointer text-2xl">
                         <Link to={"/"}>FMS</Link>
                     </li>
@@ -90,7 +98,7 @@ const Navbar = () => {
                         </button>
                     </div>
                 </div>
-                <div className={`lg:flex ${isMenuOpen ? "block" : "hidden"}`}>
+                <div className={`lg:flex lg:w-fit ${isMenuOpen ? "block" : "hidden"}`}>
                     {isAuthenticated && (
                         <div className="lg:flex items-center">
                             <li className="list-none m-2 cursor-pointer hover:text-white">
@@ -147,8 +155,39 @@ const Navbar = () => {
                             )}
                         </div>
                     )}
+                    <div className="lg:hidden flex flex-col items-center">
+                        {isAuthenticated ? (
+                            <div className="flex items-center">
+                                <Link to="/about">
+                                    <ProfileLogo />
+                                </Link>
+                                <span className="text-white mx-2">{user.name}</span>
+                                <button
+                                    className="rounded-xl mx-2 px-2 py-1 cursor-pointer hover:bg-black text-white bg-gray-700"
+                                    onClick={handleLogOut}
+                                >
+                                    Logout
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="flex items-center">
+                                <Link
+                                    to="/login"
+                                    className="rounded-xl mx-2 px-2 py-1 cursor-pointer hover:bg-black text-white bg-gray-700"
+                                >
+                                    Login
+                                </Link>
+                                <Link
+                                    to="/signup"
+                                    className="rounded-xl mx-2 px-2 py-1 cursor-pointer hover:bg-black text-white bg-gray-700"
+                                >
+                                    Signup
+                                </Link>
+                            </div>
+                        )}
+                    </div>
                 </div>
-                <div className="flex items-center">
+                <div className="hidden lg:flex flex-col items-center">
                     {isAuthenticated ? (
                         <div className="flex items-center">
                             <Link to="/about">

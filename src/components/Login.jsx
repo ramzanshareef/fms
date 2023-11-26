@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { userContext } from "../context/UserState";
 import { LoginError } from "../modals/ErrorModal";
-const backendURL = process.env.REACT_APP_BACKEND_URL;
 
 const Login = () => {
     const isAuthenticated = document.cookie.includes("isAuthenticated=true");
@@ -11,7 +10,8 @@ const Login = () => {
     const context = useContext(userContext);
     const [showLoginError, setShowLoginError] = useState(false);
     const [error, setError] = useState([]);
-    let { getUser } = context;
+    const [showLoading, setShowLoading] = useState(false);
+    let { login, getUser } = context;
     let [user, setUser] = useState({});
 
     useEffect(() => {
@@ -27,27 +27,22 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        const response = await fetch(backendURL + "/auth/login", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ email: credentials.email, password: credentials.password })
-        });
-        const jsonData = await response.json();
-        if (response.status === 200) {
-            document.cookie = "isAuthenticated=true";
-            document.cookie = "is" + jsonData.user.role + "=true";
-            nav("/");
-            window.location.reload();
-        }
-        else {
-            setError(jsonData);
-            setShowLoginError(true);
-        }
+        await login(credentials)
+            .then((data) =>{
+                if (data.user) {
+                    document.cookie = "isAuthenticated=true";
+                    document.cookie = "is" + data.user.role + "=true";
+                    setShowLoading(true);
+                    nav("/");
+                    window.location.reload();
+                }
+                else{
+                    setError(data.message);
+                    setShowLoginError(true);
+                }
+            })
     }
-    
+
     return (
         <>
             { isAuthenticated
@@ -64,8 +59,8 @@ const Login = () => {
                         <button to="/login" className="rounded-md mx-2 px-2 py-1 w-fit cursor-pointer bg-blue-600 text-white hover:bg-blue-500">Login</button>
                     </form>
                     <LoginError showError={showLoginError} error={error} onClose={()=> setShowLoginError(false)} />
+                    {showLoading && <div className="flex items-center justify-center my-5">Loading...</div>}
                 </>}
-
         </>
     )
 }

@@ -8,6 +8,45 @@ const UserState = (props) => {
     const [user, setUser] = useState([]);
     const isAuthenticated = document.cookie.includes("isAuthenticated=true");
     const role = document.cookie.includes("isdonor=true") ? "donor" : (document.cookie.includes("isadmin=true") ? "admin" : "agent");
+    
+    const signup = async (user) => {
+        const response = await fetch(backendURL + "/auth/signup", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(user)
+        });
+        const jsonData = await response.json();
+        return jsonData;
+    }
+
+    const login = async (user) => {
+        const response = await fetch(backendURL + "/auth/login", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(user)
+        });
+        const jsonData = await response.json();
+        return jsonData;
+    }
+
+    const logout = async () => {
+        const response = await fetch(backendURL + "/auth/logout", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        const jsonData = await response.json();
+        return jsonData;
+    }
+
     const getUser = async () => {
         if (isAuthenticated === true) {
             const response = await fetch(backendURL + "/user/" + role + "/", {
@@ -58,7 +97,7 @@ const UserState = (props) => {
     }
 
     return (
-        <userContext.Provider value={{ getUser, user, dashboardDetails, addDonation }}>
+        <userContext.Provider value={{ signup, login, logout, getUser, user, dashboardDetails, addDonation }}>
             {props.children}
         </userContext.Provider>
     );

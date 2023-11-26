@@ -25,7 +25,7 @@ const dashboard = async (req, res) => {
                 });
             }
             catch (err) {
-                return res.status(500).json({ error: "Internal Server Error " + err.message });
+                return res.status(500).json({ message: "Internal Server Error " + err.message });
             }
         });
     });
@@ -41,7 +41,7 @@ const getDonations = async (req, res) => {
                 return res.status(200).json({ donor, donations });
             }
             catch (err) {
-                return res.status(500).json({ error: "Internal Server Error " + err.message });
+                return res.status(500).json({ message: "Internal Server Error " + err.message });
             }
         });
     });
@@ -69,7 +69,7 @@ const postDonation = async (req, res) => {
                 return res.status(200).json({ donor, donations });
             }
             catch (err) {
-                return res.status(500).json({ error: "Internal Server Error " + err.message });
+                return res.status(500).json({ message: "Internal Server Error " + err.message });
             }
         });
     });
@@ -91,7 +91,7 @@ const deleteDonation = async (req, res) => {
                 return res.status(200).json({ donor, donations });
             }
             catch (err) {
-                return res.status(500).json({ error: "Internal Server Error " + err.message });
+                return res.status(500).json({ message: "Internal Server Error " + err.message });
             }
         });
     });
@@ -126,7 +126,7 @@ const updateDonation = async (req, res) => {
                 return res.status(200).json({ donor, donations });
             }
             catch (err) {
-                return res.status(500).json({ error: "Internal Server Error " + err.message });
+                return res.status(500).json({ message: "Internal Server Error " + err.message });
             }
         });
     });

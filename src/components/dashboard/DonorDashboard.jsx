@@ -31,16 +31,6 @@ const DonorDashboard = () => {
             });
     }, []);
 
-    const donationBoxes = [
-        { label: 'Pending Donations', statKey: 'numPendingDonations', color: 'yellow-400' },
-        { label: 'Assigned Donations', statKey: 'numAssignedDonations', color: 'yellow-500' },
-        { label: 'Accepted Donations', statKey: 'numAcceptedDonations', color: 'green-500' },
-        { label: 'Rejected Donations', statKey: 'numRejectedDonations', color: 'red-400' },
-        { label: 'Collected Donations', statKey: 'numCollectedDonations', color: 'green-600' },
-        { label: 'Total Donations', statKey: 'totalDonations', color: 'teal-700' },
-    ];
-
-
     return (
         <div>
             <div className="mx-auto text-center w-4/5 p-4 rounded-lg">
@@ -48,15 +38,30 @@ const DonorDashboard = () => {
                     <h2 className="text-white text-xl font-semibold">Donation Statistics</h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 p-4 border border-t-0 shadow-md border-blue-400 rounded-b-lg lg:grid-cols-3 xl:grid-cols-2 gap-4">
-                    {donationBoxes.map((box, index) => (
-                        <div
-                            key={index}
-                            className={`flex flex-col justify-center items-center p-4 rounded bg-${box.color} shadow-md`}
-                        >
-                            <p className="text-lg font-semibold">{box.label}</p>
-                            <p className="text-2xl">{donationStats[box.statKey] || "Nil"}</p>
-                        </div>
-                    ))}
+                    <div className="flex flex-col justify-center items-center p-4 rounded bg-yellow-400 shadow-md">
+                        <p className="text-lg font-semibold">Pending Donations</p>
+                        <p className="text-2xl">{donationStats.numPendingDonations || "Nil"}</p>
+                    </div>
+                    <div className="flex flex-col justify-center items-center p-4 rounded bg-yellow-500 shadow-md">
+                        <p className="text-lg font-semibold">Assigned Donations</p>
+                        <p className="text-2xl">{donationStats.numAssignedDonations || "Nil"}</p>
+                    </div>
+                    <div className="flex flex-col justify-center items-center p-4 rounded bg-green-500 shadow-md">
+                        <p className="text-lg font-semibold">Accepted Donations</p>
+                        <p className="text-2xl">{donationStats.numAcceptedDonations || "Nil"}</p>
+                    </div>
+                    <div className="flex flex-col justify-center items-center p-4 rounded bg-red-400 shadow-md">
+                        <p className="text-lg font-semibold">Rejected Donations</p>
+                        <p className="text-2xl">{donationStats.numRejectedDonations || "Nil"}</p>
+                    </div>
+                    <div className="flex flex-col justify-center items-center p-4 rounded bg-green-600 shadow-md">
+                        <p className="text-lg font-semibold">Collected Donations</p>
+                        <p className="text-2xl">{donationStats.numCollectedDonations || "Nil"}</p>
+                    </div>
+                    <div className="flex flex-col justify-center items-center p-4 rounded bg-blue-400 shadow-md">
+                        <p className="text-lg font-semibold">Total Donations</p>
+                        <p className="text-2xl">{donationStats.totalDonations || "Nil"}</p>
+                    </div>
                 </div>
             </div>
             <Error showError={showError} error={error} onClose={() => setShowError(false)} />
