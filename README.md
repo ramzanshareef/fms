@@ -15,8 +15,8 @@ npm i
 
 Before runnig this project, in the project root directory create .env file and add
 1. BACKEND_PORT
-2. BACKEND_URL
-3. FRONTEND_URL
+2. REACT_APP_BACKEND_URL
+3. REACT_APP_FRONTEND_URL
 4. SESSION_SECRET
 5. MONGO_URL
 
@@ -35,12 +35,12 @@ Connected to MongoDB
 ### In the root folder run -> *`npm run start`*
 
 Runs the app in the development mode.\
-Open [FRONTEND_URL](FRONTEND_URL) to view it in your browser.
+Open [REACT_APP_FRONTEND_URL](REACT_APP_FRONTEND_URL) to view it in your browser.
 
 The page will reload when you make changes and shows this on the console.
 ```
 You can now view fms in the browser.
-  Local:            FRONTEND_URL
+  Local:            REACT_APP_FRONTEND_URL
   On Your Network:  URL
 
 Note that the development build is not optimized.
