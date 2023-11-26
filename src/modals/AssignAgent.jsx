@@ -4,9 +4,6 @@ import { SuccessModal } from "./SuccesModal";
 import { Error } from "./ErrorModal";
 import { adminContext } from "../context/AdminState";
 
-const backendURL = process.env.REACT_APP_BACKEND_URL;
-const frontendURL = process.env.REACT_APP_FRONTEND_URL;
-
 const AssignAgent = ({ isOpen, onClose, donation, agents }) => {
     const context = useContext(adminContext);
     const { assignAgent } = context;
