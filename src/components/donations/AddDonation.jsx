@@ -15,13 +15,12 @@ const AddDonation = () => {
         addDonation(data)
             .then(() => {
                 setShowSuccess(true);
-                // alert("Donation Added Successfully");
             })
             .catch((err) => {
                 console.log(err);
                 alert("Error, Check console for more details");
             });
-        setData({ "foodName": "", "foodQuantity": 0, "phoneNo": 0, "cookingTime": "", "address": "", "donorToAdminMsg": undefined });
+        setData({ "foodName": "", "foodQuantity": 0, "phoneNo": 0, "cookingTime": "", "address": "", "donorToAdminMsg": "" });
     };
 
     return (
@@ -101,7 +100,7 @@ const AddDonation = () => {
                     <label htmlFor="donorToAdminMsg" className="block text-gray-700 text-sm font-bold mb-2">
                         Donor to Admin Message
                     </label>
-                    <input
+                    <textarea
                         type="text"
                         name="donorToAdminMsg"
                         value={data.donorToAdminMsg}
