@@ -1,9 +1,79 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { userContext } from "../../context/UserState";
+import { Error } from "../../modals/ErrorModal";
 
 const AdminDashboard = () => {
-  return (
-    <div>AdminDashboard</div>
-  )
+    const context = useContext(userContext);
+    let { getUser, dashboardDetails } = context;
+    let [user, setUser] = useState({});
+    let [donationStats, setDonationStats] = useState({});
+    const [showError, setShowError] = useState(false);
+    const [error, setError] = useState([]);
+
+    useEffect(() => {
+        document.title = "Admin Dashboard | FMS";
+        getUser()
+            .then((data) => {
+                setUser(data);
+            })
+            .catch((err) => {
+                setError(err);
+                setShowError(true);
+            });
+        dashboardDetails()
+            .then((data) => {
+                setDonationStats(data);
+            })
+            .catch((err) => {
+                setError(err);
+                setShowError(true);
+            });
+    }, []);
+
+    return (
+        <div>
+            <div className="mx-auto text-center w-4/5 p-4 rounded-lg">
+                <div className="bg-blue-400 p-4 rounded-t-lg">
+                    <h2 className="text-white text-xl font-semibold">Donor Dashboard</h2>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 p-4 border border-t-0 shadow-md border-blue-400 rounded-b-lg lg:grid-cols-3 xl:grid-cols-2 gap-4">
+                    <div className="flex flex-col justify-center items-center p-4 rounded bg-yellow-400 shadow-md">
+                        <p className="text-lg font-semibold">Pending Donations</p>
+                        <p className="text-2xl">{donationStats.numPendingDonations || "Nil"}</p>
+                    </div>
+                    <div className="flex flex-col justify-center items-center p-4 rounded bg-yellow-500 shadow-md">
+                        <p className="text-lg font-semibold">Assigned Donations</p>
+                        <p className="text-2xl">{donationStats.numAssignedDonations || "Nil"}</p>
+                    </div>
+                    <div className="flex flex-col justify-center items-center p-4 rounded bg-green-500 shadow-md">
+                        <p className="text-lg font-semibold">Accepted Donations</p>
+                        <p className="text-2xl">{donationStats.numAcceptedDonations || "Nil"}</p>
+                    </div>
+                    <div className="flex flex-col justify-center items-center p-4 rounded bg-red-400 shadow-md">
+                        <p className="text-lg font-semibold">Rejected Donations</p>
+                        <p className="text-2xl">{donationStats.numRejectedDonations || "Nil"}</p>
+                    </div>
+                    <div className="flex flex-col justify-center items-center p-4 rounded bg-green-600 shadow-md">
+                        <p className="text-lg font-semibold">Collected Donations</p>
+                        <p className="text-2xl">{donationStats.numCollectedDonations || "Nil"}</p>
+                    </div>
+                    <div className="flex flex-col justify-center items-center p-4 rounded bg-blue-400 shadow-md">
+                        <p className="text-lg font-semibold">Total Donations</p>
+                        <p className="text-2xl">{donationStats.numTotalDonations || "Nil"}</p>
+                    </div>
+                    <div className="flex flex-col justify-center items-center p-4 rounded bg-blue-400 shadow-md">
+                        <p className="text-lg font-semibold">Number of Donors</p>
+                        <p className="text-2xl">{donationStats.numDonors || "Nil"}</p>
+                    </div>
+                    <div className="flex flex-col justify-center items-center p-4 rounded bg-blue-400 shadow-md">
+                        <p className="text-lg font-semibold">Number of Agents</p>
+                        <p className="text-2xl">{donationStats.numAgents || "Nil"}</p>
+                    </div>
+                </div>
+            </div>
+            <Error showError={showError} error={error} onClose={() => setShowError(false)} />
+        </div>
+    );
 }
 
-export default AdminDashboard
+export default AdminDashboard;

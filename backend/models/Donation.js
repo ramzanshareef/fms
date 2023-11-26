@@ -30,6 +30,12 @@ const DonationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    phoneNo: {
+        type: Number,
+        required: true,
+        maxlength: 10,
+        minlength: 10,
+    },
     status: {
         type: String,
         enum: ["pending", "assigned", "accepted", "rejected", "collected"],

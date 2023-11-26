@@ -2,6 +2,8 @@ import React, { useState, useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { userContext } from "../context/UserState";
 import { SingupError } from "../modals/ErrorModal";
+import { SuccessModal } from "../modals/SuccesModal";
+import { Loader } from "../modals/LoaderModal";
 const backendURL = process.env.REACT_APP_BACKEND_URL;
 
 const Signup = () => {
@@ -10,15 +12,19 @@ const Signup = () => {
     const [credentials, setCredentials] = useState({ "name": "", "email": "", "password": "", "role": "" });
     const context = useContext(userContext);
     const [showSingupError, setShowSingupError] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [showLoader, setShowLoader] = useState(false);
     const [errors, setErrors] = useState([]);
     let [user, setUser] = useState({});
     let { signup, getUser } = context;
 
     useEffect(() => {
-        getUser()
-            .then((data) => {
-                setUser(data);
-            })
+        if (isAuthenticated) {
+            getUser()
+                .then((data) => {
+                    setUser(data);
+                })
+        }
     }, []);
 
     const handleOnChange = (e) => {
@@ -31,23 +37,33 @@ const Signup = () => {
             .then((data) => {
                 if (data.errors) {
                     setErrors(data.errors);
+                    setCredentials({ "name": "", "email": "", "password": "", "role": "" });
                     setShowSingupError(true);
                 }
                 else if (data.user) {
-                    setErrors([{"msg": "This email is already registered"}]);
+                    setErrors([{ "msg": "This email is already registered" }]);
+                    setCredentials({ "name": "", "email": "", "password": "", "role": "" });
                     setShowSingupError(true);
                 }
                 else {
-                    nav("/login");
-                    window.location.reload();
+                    setCredentials({ "name": "", "email": "", "password": "", "role": "" });
+
+                    setShowLoader(true);
+                    setTimeout(()=>{
+                        setShowLoader(false);
+                        setShowSuccess(true);
+                        setTimeout(()=>{
+                            nav("/login");
+                        }, 500)
+                    }, 500)
                 }
             })
-            .catch((err)=> {
-                setErrors([{"msg": err.message}]);
+            .catch((err) => {
+                setErrors([{ "msg": err.message }]);
                 setShowSingupError(true);
             })
     }
-    
+
     return (
         <>
             {isAuthenticated
@@ -72,7 +88,9 @@ const Signup = () => {
                         </select>
                         <button to="/login" className="rounded-md mx-2 px-2 py-1 w-fit cursor-pointer bg-blue-600 text-white hover:bg-blue-500">Signup</button>
                     </form>
-                    <SingupError errors={errors} onClose={()=> setShowSingupError(false)} showError={showSingupError} />
+                    <SingupError errors={errors} onClose={() => setShowSingupError(false)} showError={showSingupError} />
+                    <SuccessModal showSuccess={showSuccess} message="Signup Successful" onClose={() => setShowSuccess(false)} />
+                    <Loader showLoader={showLoader} />
                 </>
             }
         </>

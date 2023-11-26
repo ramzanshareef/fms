@@ -7,18 +7,20 @@ const Home = () => {
     const context = useContext(userContext);
     let { getUser } = context;
     let [user, setUser] = useState({});
-    
+
     useEffect(() => {
         document.title = "Home | FMS";
-        getUser()
-            .then((data) => {
-                setUser(data);
-            })
+        if (isAuthenticated) {
+            getUser()
+                .then((data) => {
+                    setUser(data);
+                })
+        }
     }, []);
 
     return (
         <>
-            { isAuthenticated
+            {isAuthenticated
                 ?
                 <div className="w-4/5 mx-auto my-2 p-2">
                     <p>This is your authenticated website of {user.name} ({user.role}) </p>

@@ -78,30 +78,25 @@ const UserState = (props) => {
         }
     }
 
-    const addDonation = async (donation) => {
-        if (isAuthenticated === true) {
-            const response = await fetch(backendURL + "/user/donor/donation", {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(donation)
-            });
-            if (response.status === 200){
-                const jsonData = await response.json();
-                return jsonData;
-            }
-            return response;
-        }
+    const editProfile = async (updateFields) => {
+        const response = await fetch(backendURL + "/user/" + role + "/edit", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify(updateFields)
+        });
+        const jsonData = await response.json();
+        return jsonData;
     }
+    
 
     return (
-        <userContext.Provider value={{ signup, login, logout, getUser, user, dashboardDetails, addDonation }}>
+        <userContext.Provider value={{ signup, login, logout, getUser, user, dashboardDetails, editProfile }}>
             {props.children}
         </userContext.Provider>
     );
 }
 
-export default UserState;
-export { userContext };
+export { UserState, userContext };

@@ -1,18 +1,23 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import CloseButton from "../images/CloseButton";
 import { LoginError } from "../modals/ErrorModal";
+import { SuccessModal } from "./SuccesModal";
+import { userContext } from "../context/UserState";
 
 const backendURL = process.env.REACT_APP_BACKEND_URL;
+const frontendURL = process.env.REACT_APP_FRONTEND_URL;
 
 const EditProfile = ({ isOpen, onClose, user }) => {
+    const { editProfile } = useContext(userContext);
     const [showError, setShowError] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
     const [error, setError] = useState([]);
-    let [name, setName] = useState();
-    let [email, setEmail] = useState();
-    let [gender, setGender] = useState();
-    let [address, setAddress] = useState();
-    let [phoneNo, setphoneNo] = useState();
-    let role = user.role;
+    const [name, setName] = useState();
+    const [email, setEmail] = useState();
+    const [gender, setGender] = useState();
+    const [address, setAddress] = useState();
+    const [phoneNo, setphoneNo] = useState();
+    const role = user.role;
     const updateFields = {}
     if (name) updateFields.name = name;
     if (email) updateFields.email = email;
@@ -21,24 +26,14 @@ const EditProfile = ({ isOpen, onClose, user }) => {
     if (phoneNo) updateFields.phoneNo = phoneNo;
     const handleSaveProfile = async (e) => {
         e.preventDefault();
-        const response = await fetch(backendURL + "/user/" + role + "/edit", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-            body: JSON.stringify(updateFields)
-        });
-        const jsonData = await response.json();
-        if (response.status === 200) {
-            onClose();
-            alert("Profile Updated Successfully!");
-            window.location.reload();
-        }
-        else {
-            setError(jsonData);
-            setShowError(true);
-        }
+        await editProfile(updateFields)
+            .then((data)=>{
+                setShowSuccess(true);
+                setTimeout(() => {
+                    onClose();
+                }, 1000);
+                document.location.href = frontendURL + "/about";
+            })
     };
     return (
         <>
@@ -125,6 +120,7 @@ const EditProfile = ({ isOpen, onClose, user }) => {
                         </div>
                     </div>
                     <LoginError showError={showError} error={error} onClose={() => setShowError(false)} />
+                    <SuccessModal showSuccess={showSuccess} message="Profile Updated Successfully!" onClose={() => setShowSuccess(false)} />
                 </div>
                 :
                 <></>

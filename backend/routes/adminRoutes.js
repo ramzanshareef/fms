@@ -7,6 +7,7 @@ router.get("/", getAdminUser);
 router.post("/edit", editAdmin);
 router.get("/dashboard", dashboard);
 router.get("/agents", showAgents);
+router.get("/donations", showDonations);
 router.post("/assign", assignAgent);
 router.get("/rejected", showRejectedDonations);
 

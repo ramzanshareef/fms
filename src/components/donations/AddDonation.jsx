@@ -1,27 +1,27 @@
 import React, { useContext, useState } from "react";
-import { userContext } from "../../context/UserState";
+import { donorContext } from "../../context/DonorState";
+import { SuccessModal } from "../../modals/SuccesModal";
 
 const AddDonation = () => {
-    const isAuthenticated = document.cookie.includes("isAuthenticated=true");
-    const isDonor = document.cookie.includes("isdonor=true");
-
-    const [data, setData] = useState({ "foodName": "", "foodQuantity": 0, "cookingTime": "", "address": "", "donorToAdminMsg": undefined });
+    const context = useContext(donorContext);
+    const { addDonation } = context;
+    const [data, setData] = useState({ "foodName": "", "foodQuantity": 0, "phoneNo": 0, "cookingTime": "", "address": "", "donorToAdminMsg": undefined });
+    const [showSuccess, setShowSuccess] = useState(false);
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value });
     }
-    const context = useContext(userContext);
-    const { addDonation } = context;
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(data);
         addDonation(data)
-            .then((res) => {
-                alert("Donation Added Successfully");
+            .then(() => {
+                setShowSuccess(true);
+                // alert("Donation Added Successfully");
             })
             .catch((err) => {
                 console.log(err);
                 alert("Error, Check console for more details");
             });
+        setData({ "foodName": "", "foodQuantity": 0, "phoneNo": 0, "cookingTime": "", "address": "", "donorToAdminMsg": undefined });
     };
 
     return (
@@ -70,6 +70,20 @@ const AddDonation = () => {
                     />
                 </div>
                 <div className="mb-4">
+                    <label htmlFor="phoneNo" className="block text-gray-700 text-sm font-bold mb-2">
+                        Phone Number
+                    </label>
+                    <input
+                        type="number"
+                        name="phoneNo"
+                        value={data.phoneNo}
+                        onChange={handleChange}
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Enter Phone Number"
+                        required
+                    />
+                </div>
+                <div className="mb-4">
                     <label htmlFor="address" className="block text-gray-700 text-sm font-bold mb-2">
                         Address
                     </label>
@@ -105,6 +119,7 @@ const AddDonation = () => {
                     </button>
                 </div>
             </form>
+            <SuccessModal showSuccess={showSuccess} message={"Donation Added Successfully!"} onClose={()=> setShowSuccess(false)} />
         </>
     );
 };

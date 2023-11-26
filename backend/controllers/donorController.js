@@ -14,14 +14,14 @@ const dashboard = async (req, res) => {
                 const numAssignedDonations = await Donation.countDocuments({ donor: donorID, status: "assigned" });
                 const numCollectedDonations = await Donation.countDocuments({ donor: donorID, status: "collected" });
                 const numRejectedDonations = await Donation.countDocuments({ donor: donorID, status: "rejected" });
-                const totalDonations = numPendingDonations + numAcceptedDonations + numAssignedDonations + numCollectedDonations + numRejectedDonations;    
+                const numTotalDonations = numPendingDonations + numAcceptedDonations + numAssignedDonations + numCollectedDonations + numRejectedDonations;    
                 return res.status(200).json({
                     numPendingDonations,
                     numAcceptedDonations,
                     numAssignedDonations,
                     numCollectedDonations,
                     numRejectedDonations,
-                    totalDonations
+                    numTotalDonations
                 });
             }
             catch (err) {
@@ -54,12 +54,13 @@ const postDonation = async (req, res) => {
                 const donorID = req.session.userID;
                 const donor = await User.findById(donorID).select("-_id name");
                 const donations = await Donation.find({ donor: donorID }).select("-_id -__v -donor");
-                let { foodName, foodQuantity, cookingTime, address, donorToAdminMsg } = req.body;
+                let { foodName, foodQuantity, cookingTime, phoneNo, address, donorToAdminMsg } = req.body;
                 const donation = new Donation({
                     foodName,
                     foodQuantity,
                     cookingTime: myDateTime(cookingTime),
                     address,
+                    phoneNo,
                     donor: donorID,
                     status: "pending",
                     donorToAdminMsg

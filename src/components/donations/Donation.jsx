@@ -20,7 +20,7 @@ const Donation = () => {
                 </>
                 :
                 <>
-                    <Error showError={showError} error={{ message: "Login as Donor to donate" }} onClose={() => setShowError(false)} />
+                    <Error showError={showError} error={{ message: "Login as Donor to Continue" }} onClose={() => setShowError(false)} />
                 </>
             }
         </>

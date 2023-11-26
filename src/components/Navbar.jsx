@@ -18,13 +18,15 @@ const Navbar = () => {
     const navbarRef = useRef(null);
 
 
-    useEffect(() => {
-        getUser().then((data) => {
-            setUser(data);
-        });
+    useEffect(() => { // Get user details
+        if (isAuthenticated) {
+            getUser().then((data) => {
+                setUser(data);
+            });
+        }
     }, []);
 
-    useEffect(() => {
+    useEffect(() => { // Close the menu when clicked outside
         const handleOutsideClick = (event) => {
             if (navbarRef.current && !navbarRef.current.contains(event.target)) {
                 setIsMenuOpen(false);
@@ -36,7 +38,7 @@ const Navbar = () => {
         };
     }, []);
 
-    const handleLogOut = async (e) => {
+    const handleLogOut = async (e) => { // Logout Function
         e.preventDefault();
         logout()
             .then((data) => {
@@ -149,6 +151,26 @@ const Navbar = () => {
                                             className={`${location.pathname === "/donations/previous" ? "text-white" : ""}`}
                                         >
                                             Previous Donations
+                                        </Link>
+                                    </li>
+                                </>
+                            )}
+                            {isAdmin && (
+                                <>
+                                    <li className="list-none m-2 cursor-pointer hover:text-white">
+                                        <Link
+                                            to={"/agents"}
+                                            className={`${location.pathname === "/agents" ? "text-white" : ""}`}
+                                        >
+                                            Agents
+                                        </Link>
+                                    </li>
+                                    <li className="list-none m-2 cursor-pointer hover:text-white">
+                                        <Link
+                                            to={"/donations"}
+                                            className={`${location.pathname === "/donations" ? "text-white" : ""}`}
+                                        >
+                                            Assign Agents
                                         </Link>
                                     </li>
                                 </>

@@ -13,7 +13,9 @@ const dashboard = async (req, res) => {
                 const numRejectedDonations = await Donation.countDocuments({ status: "rejected" });
                 const numCollectedDonations = await Donation.countDocuments({ status: "collected" });
                 const numTotalDonations = await Donation.countDocuments();
-                return res.status(200).json({ numPendingDonations, numAssignedDonations, numAcceptedDonations, numRejectedDonations, numCollectedDonations, numTotalDonations });
+                const numAgents = await User.countDocuments({ role: "agent" });
+                const numDonors = await User.countDocuments({ role: "donor" });
+                return res.status(200).json({ numPendingDonations, numAssignedDonations, numAcceptedDonations, numRejectedDonations, numCollectedDonations, numTotalDonations, numAgents, numDonors });
             }
             catch (err) {
                 return res.status(500).json({ message: "Internal Server Error " + err.message });
@@ -26,7 +28,7 @@ const showAgents = async (req, res) => {
     isAuthenticated(req, res, async () => {
         isAdmin(req, res, async () => {
             try {
-                const agents = await User.find({ role: "agent" }).select("-_id name email");
+                const agents = await User.find({ role: "agent" }).select("-password -__v");
                 return res.status(200).json({ agents });
             }
             catch (err) {
@@ -77,10 +79,24 @@ const showRejectedDonations = async (req, res) => {
     });
 }
 
+const showDonations = async (req, res) => {
+    isAuthenticated(req, res, async () => {
+        isAdmin(req, res, async () => {
+            try {
+                const donations = await Donation.find({ status: { $ne: "collected" } }).populate("donor", "name email");
+                return res.status(200).json({ donations });
+            }
+            catch (err) {
+                return res.status(500).json({ message: "Internal Server Error " + err.message });
+            }
+        });
+    });
+}
 
 module.exports = {
     dashboard,
     showAgents,
     assignAgent,
+    showDonations,
     showRejectedDonations
 }

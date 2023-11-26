@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { userContext } from "../context/UserState";
 import { LoginError } from "../modals/ErrorModal";
+import { Loader } from "../modals/LoaderModal";
 
 const Login = () => {
     const isAuthenticated = document.cookie.includes("isAuthenticated=true");
@@ -9,16 +10,19 @@ const Login = () => {
     const [credentials, setCredentials] = useState({ "email": "", "password": "" });
     const context = useContext(userContext);
     const [showLoginError, setShowLoginError] = useState(false);
-    const [error, setError] = useState([]);
-    const [showLoading, setShowLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [showLoader, setShowLoader] = useState(false);
     let { login, getUser } = context;
     let [user, setUser] = useState({});
 
     useEffect(() => {
-        getUser()
-            .then((data) => {
-                setUser(data);
-            })
+        if (isAuthenticated) {
+            getUser()
+                .then((data) => {
+                    setUser(data);
+                    setShowLoader(false);
+                })
+        }
     }, []);
 
     const onChange = (e) => {
@@ -27,17 +31,16 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        setShowLoader(true);
         await login(credentials)
-            .then((data) =>{
+            .then((data) => {
                 if (data.user) {
                     document.cookie = "isAuthenticated=true";
                     document.cookie = "is" + data.user.role + "=true";
-                    setShowLoading(true);
-                    nav("/");
-                    window.location.reload();
+                    document.location.href = process.env.REACT_APP_FRONTEND_URL;
                 }
-                else{
-                    setError(data.message);
+                else {
+                    setError(data);
                     setShowLoginError(true);
                 }
             })
@@ -45,7 +48,7 @@ const Login = () => {
 
     return (
         <>
-            { isAuthenticated
+            {isAuthenticated
                 ? <>
                     <div className="flex items-center justify-center my-5">Already logged in as {user.name}!</div>
 
@@ -58,8 +61,8 @@ const Login = () => {
                         <input className="border border-black px-2 py-1" type="password" name="password" value={credentials.password} onChange={onChange} />
                         <button to="/login" className="rounded-md mx-2 px-2 py-1 w-fit cursor-pointer bg-blue-600 text-white hover:bg-blue-500">Login</button>
                     </form>
-                    <LoginError showError={showLoginError} error={error} onClose={()=> setShowLoginError(false)} />
-                    {showLoading && <div className="flex items-center justify-center my-5">Loading...</div>}
+                    <LoginError showError={showLoginError} error={error} onClose={() => setShowLoginError(false)} />
+                    <Loader showLoader={showLoader} />
                 </>}
         </>
     )

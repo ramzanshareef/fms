@@ -11,10 +11,13 @@ const About = () => {
 
     useEffect(() => {
         document.title = "About | FMS";
-        getUser()
-            .then((data) => {
-                setUser(data);
-            });
+        if (isAuthenticated) {
+            getUser()
+                .then((data) => {
+                    setUser(data);
+                });
+        }
+
     }, []);
 
     const handleEditProfile = () => {
@@ -32,7 +35,7 @@ const About = () => {
                                 <button onClick={handleEditProfile} className="rounded-lg mx-2 px-2 py-1 cursor-pointer bg-blue-600 text-white hover:bg-blue-500">Edit Profile</button>
                             </div>
                         </div>
-                        <EditProfile isOpen={isEditProfileOpen} onClose={()=> setIsEditProfileOpen(false)} user={user} />
+                        <EditProfile isOpen={isEditProfileOpen} onClose={() => setIsEditProfileOpen(false)} user={user} />
                     </>)
                 : (
                     <>

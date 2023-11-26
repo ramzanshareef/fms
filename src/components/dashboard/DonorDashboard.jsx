@@ -35,7 +35,7 @@ const DonorDashboard = () => {
         <div>
             <div className="mx-auto text-center w-4/5 p-4 rounded-lg">
                 <div className="bg-blue-400 p-4 rounded-t-lg">
-                    <h2 className="text-white text-xl font-semibold">Donation Statistics</h2>
+                    <h2 className="text-white text-xl font-semibold">Donor Dashboard</h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 p-4 border border-t-0 shadow-md border-blue-400 rounded-b-lg lg:grid-cols-3 xl:grid-cols-2 gap-4">
                     <div className="flex flex-col justify-center items-center p-4 rounded bg-yellow-400 shadow-md">
@@ -60,7 +60,7 @@ const DonorDashboard = () => {
                     </div>
                     <div className="flex flex-col justify-center items-center p-4 rounded bg-blue-400 shadow-md">
                         <p className="text-lg font-semibold">Total Donations</p>
-                        <p className="text-2xl">{donationStats.totalDonations || "Nil"}</p>
+                        <p className="text-2xl">{donationStats.numTotalDonations || "Nil"}</p>
                     </div>
                 </div>
             </div>
