@@ -1,4 +1,4 @@
-const dotenv = require("dotenv").config({path: "../.env"});
+const dotenv = require("dotenv").config({path: "./.env"});
 const express = require("express");
 const { sessionConfig, corsConfig, contentConfig, port } = require("./config/config");
 const { connectToMongo } = require("./database/db");
