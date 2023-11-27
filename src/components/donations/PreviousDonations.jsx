@@ -30,8 +30,10 @@ const PreviousDoantions = () => {
         <>
             {isAuthenticated && isDonor ? (
                 <div className="m-4 overflow-auto">
-                    <h1 className="text-center text-2xl font-bold m-4">Previous Donations</h1>
                     <table className="w-4/5 mx-auto border-2 border-black">
+                        <caption>
+                            <h1 className="text-center text-2xl font-bold m-4">Previous Donations</h1>
+                        </caption>
                         <thead>
                             <tr className="bg-gray-400">
                                 <th className="border-2 border-black p-3">S. No.</th>

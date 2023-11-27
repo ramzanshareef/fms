@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Router, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { userContext } from "../context/UserState";
 import ProfileLogo from "../images/ProfileLogo";
@@ -167,8 +167,8 @@ const Navbar = () => {
                                     </li>
                                     <li className="list-none m-2 cursor-pointer hover:text-white">
                                         <Link
-                                            to={"/donations"}
-                                            className={`${location.pathname === "/donations" ? "text-white" : ""}`}
+                                            to={"/assignAgents"}
+                                            className={`${location.pathname === "/assignAgents" ? "text-white" : ""}`}
                                         >
                                             Assign Agents
                                         </Link>
@@ -182,7 +182,7 @@ const Navbar = () => {
                                             to={"/donations"}
                                             className={`${location.pathname === "/donations" ? "text-white" : ""}`}
                                         >
-                                            Donations
+                                            Assigned
                                         </Link>
                                     </li>
                                 </>

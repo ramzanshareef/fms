@@ -83,7 +83,7 @@ const showDonations = async (req, res) => {
     isAuthenticated(req, res, async () => {
         isAdmin(req, res, async () => {
             try {
-                const donations = await Donation.find({ status: { $ne: "collected" } }).populate("donor", "name email");
+                const donations = await Donation.find({ status: { $ne: "collected" } }).populate("donor", "name email").populate("agent", "name email")
                 return res.status(200).json({ donations });
             }
             catch (err) {

@@ -2,38 +2,39 @@ import React, { useContext, useState } from "react";
 import CloseButton from "../images/CloseButton";
 import { SuccessModal } from "./SuccesModal";
 import { Error } from "./ErrorModal";
-import { adminContext } from "../context/AdminState";
+import { agentContext } from "../context/AgentState";
 
-const AssignAgent = ({ isOpen, onClose, donation, agents }) => {
-    const context = useContext(adminContext);
-    const { assignAgent } = context;
+const AgentAcceptance = ({ isOpen, onClose, donation }) => {
+    const context = useContext(agentContext);
+    const { assignStatus } = context;
     const [showSuccess, setShowSuccess] = useState(false);
-    const [agent, setAgent] = useState();
-    const [agentAssigned, setAgentAssigned] = useState(false);
+    const [status, setStatus] = useState();
+    const [statusAssigned, setStatusAssigned] = useState(false);
     const [error, setError] = useState({});
     const [showError, setShowError] = useState(false);
     const [message, setMessage] = useState();
 
-    const handleAssignAgent = async (e) => {
+    const handleAgentAcceptance = async (e) => {
         e.preventDefault();
-        if (agentAssigned === false) {
-            setError({ message: "Please select an agent" })
-            setShowError(true)
+        if (statusAssigned === false) {
+            setError({ message: "Please Set a status" });
+            setShowError(true);
         }
         else {
-            await assignAgent(donation._id, agent, message)
-                .then((data) => {
-                    setMessage(data.message)
+            await assignStatus(donation._id, status)
+                .then((data)=>{
+                    setMessage(data.message);
                     setShowSuccess(true);
                     setTimeout(() => {
                         onClose();
                     }, 1000);
                     window.location.reload();
                 })
-                .catch((err) => {
-                    setError(err.message)
-                    setShowError(true)
+                .catch((err)=>{
+                    setError(err.message);
+                    setShowError(true);
                 })
+                
         }
     };
 
@@ -49,7 +50,19 @@ const AssignAgent = ({ isOpen, onClose, donation, agents }) => {
                                 {<CloseButton />}
                             </button>
                         </h2>
-                        <form >
+                        <form>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+                                    Donor
+                                </label>
+                                <input
+                                    className="w-full border rounded-md py-2 px-3"
+                                    type="text"
+                                    id="name"
+                                    value={donation.donor.name + " (" + donation.donor.email + ")"}
+                                    disabled
+                                />
+                            </div>
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
                                     Food Name
@@ -100,18 +113,6 @@ const AssignAgent = ({ isOpen, onClose, donation, agents }) => {
                             </div>
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                                    Donor
-                                </label>
-                                <input
-                                    className="w-full border rounded-md py-2 px-3"
-                                    type="text"
-                                    id="name"
-                                    value={donation.donor.name}
-                                    disabled
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
                                     Donor Phone Number
                                 </label>
                                 <input
@@ -124,46 +125,42 @@ const AssignAgent = ({ isOpen, onClose, donation, agents }) => {
                             </div>
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                                    Agent
+                                    Status
                                 </label>
                                 <select
-                                    name="agent"
-                                    className="w-full border rounded-md py-2 px-3"
+                                    name="status"
+                                    className="w-fit border rounded-md py-2 px-3"
                                     onChange={(e) => {
-                                        setAgent(e.target.value)
-                                        setAgentAssigned(true)
+                                        setStatus(e.target.value)
+                                        setStatusAssigned(true)
                                     }}
                                     required={true}
                                 >
                                     <option selected disabled className="bg-gray-500 text-white">
-                                        Select Agent
+                                        Accept/Reject
                                     </option>
-                                    {agents.map((agent, index) => (
-                                        <option key={index} value={agent._id}>
-                                            {agent.name}
-                                        </option>
-                                    ))}
+                                    <option value="accepted" className="bg-green-400">Accept</option>
+                                    <option value="rejected" className="bg-red-400">Reject</option>
                                 </select>
                             </div>
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                                    Message to Agent
+                                    Message From Admin
                                 </label>
-                                <textarea
+                                <input
                                     className="w-full border rounded-md py-2 px-3"
                                     type="text"
-                                    id="name"
-                                    value={message || donation.adminToAgentMsg}
-                                    onChange={(e) => setMessage(e.target.value)}
+                                    value={donation.adminToAgentMsg}
+                                    disabled
                                 />
                             </div>
                             <div className="flex flex-row justify-between">
                                 <button
                                     type="submit"
                                     className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-                                    onClick={handleAssignAgent}
+                                    onClick={handleAgentAcceptance}
                                 >
-                                    Assign
+                                    Done
                                 </button>
                                 <button
                                     className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
@@ -185,4 +182,4 @@ const AssignAgent = ({ isOpen, onClose, donation, agents }) => {
     );
 };
 
-export default AssignAgent;
+export default AgentAcceptance;

@@ -14,40 +14,44 @@ import { DonorState } from "./context/DonorState";
 import ShowAgents from "./components/agents/ShowAgents";
 import { AdminState } from "./context/AdminState";
 import AssignAgents from "./components/agents/AssignAgents";
+import AcceptRejectDonations from "./components/donations/AcceptRejectDonations";
+import { AgentState } from "./context/AgentState";
 
 function App() {
     return (
         <>
             <UserState>
-                <AdminState>
-                    <DonorState>
-                        <Router>
-                            <Navbar />
-                            <Routes>
-                                {/* Common Routes */}
-                                <Route path="/" element={<Home />} />
-                                <Route path="/login" element={<Login />} />
-                                <Route path="/signup" element={<Signup />} />
-                                <Route path="*" element={<NotFound />} />
-                                <Route path="/about" element={<About />} />
-                                <Route path="/dashboard" element={<Dashboard />} />
+                <AgentState>
+                    <AdminState>
+                        <DonorState>
+                            <Router>
+                                <Navbar />
+                                <Routes>
+                                    {/* Common Routes */}
+                                    <Route path="/" element={<Home />} />
+                                    <Route path="/login" element={<Login />} />
+                                    <Route path="/signup" element={<Signup />} />
+                                    <Route path="*" element={<NotFound />} />
+                                    <Route path="/about" element={<About />} />
+                                    <Route path="/dashboard" element={<Dashboard />} />
 
-                                {/* Donor Routes */}
-                                <Route path="/donate" element={<Donation />} />
-                                <Route path="/donations/pending" element={<PendingDonations />} />
-                                <Route path="/donations/previous" element={<PreviousDoantions />} />
+                                    {/* Donor Routes */}
+                                    <Route path="/donate" element={<Donation />} />
+                                    <Route path="/donations/pending" element={<PendingDonations />} />
+                                    <Route path="/donations/previous" element={<PreviousDoantions />} />
 
-                                {/* Admin Routes */}
-                                <Route path="/agents" element={<ShowAgents />} />
-                                <Route path="/donations" element={<AssignAgents />} />
+                                    {/* Admin Routes */}
+                                    <Route path="/agents" element={<ShowAgents />} />
+                                    <Route path="/assignAgents" element={<AssignAgents />} />
 
-                                {/* Agent Routes */}
-                                {/* <Route path="/donation" element={ "" } /> */}
+                                    {/* Agent Routes */}
+                                    <Route path="/donations" element={<AcceptRejectDonations />} />
 
-                            </Routes>
-                        </Router>
-                    </DonorState>
-                </AdminState>
+                                </Routes>
+                            </Router>
+                        </DonorState>
+                    </AdminState>
+                </AgentState>
             </UserState>
         </>
     );

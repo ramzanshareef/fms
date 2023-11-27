@@ -9,12 +9,12 @@ const PendingDonations = () => {
     const [showError, setShowError] = useState(false);
 
     const [pendingDonations, setPendingDonations] = useState([]);
-    
+
     useEffect(() => {
         if (isAuthenticated && isDonor) {
             getDonations()
-                .then((data)=>{
-                    setPendingDonations(data.donations.filter((donation)=>donation.status === "pending"));
+                .then((data) => {
+                    setPendingDonations(data.donations.filter((donation) => donation.status === "pending"));
                 })
         }
         else {
@@ -27,8 +27,10 @@ const PendingDonations = () => {
         <>
             {isAuthenticated && isDonor ? (
                 <div className="m-4 overflow-auto">
-                    <h1 className="text-center text-2xl font-bold m-4">Pending Donations</h1>
                     <table className="w-4/5 mx-auto border-2 border-black">
+                        <caption>
+                            <h1 className="text-center text-2xl font-bold m-4">Pending Donations</h1>
+                        </caption>
                         <thead>
                             <tr className="bg-gray-400">
                                 <th className="border-2 border-black p-3">S. No.</th>
@@ -48,7 +50,7 @@ const PendingDonations = () => {
                                 </tr>
                             )}
                             {pendingDonations.map((data, index) => (
-                                <tr key={index} className={` ${index %2==0 ? "bg-gray-300" : "bg-white"} `}>
+                                <tr key={index} className={` ${index % 2 == 0 ? "bg-gray-300" : "bg-white"} `}>
                                     <td className="border border-black text-center p-3">{index + 1}</td>
                                     <td className="border border-black text-center p-3">{data.foodName}</td>
                                     <td className="border border-black text-center p-3">{data.foodQuantity}</td>

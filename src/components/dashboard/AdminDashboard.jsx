@@ -34,7 +34,7 @@ const AdminDashboard = () => {
         <div>
             <div className="mx-auto text-center w-4/5 p-4 rounded-lg">
                 <div className="bg-blue-400 p-4 rounded-t-lg">
-                    <h2 className="text-white text-xl font-semibold">Donor Dashboard</h2>
+                    <h2 className="text-white text-xl font-semibold">Admin Dashboard</h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 p-4 border border-t-0 shadow-md border-blue-400 rounded-b-lg lg:grid-cols-3 xl:grid-cols-2 gap-4">
                     <div className="flex flex-col justify-center items-center p-4 rounded bg-yellow-400 shadow-md">

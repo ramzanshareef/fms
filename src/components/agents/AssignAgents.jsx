@@ -11,7 +11,6 @@ const AssignAgents = () => {
     const [agents, setAgents] = useState([]);
     const [showError, setShowError] = useState(false);
     const [donations, setDonations] = useState([]);
-    const [selectedAgent, setSelectedAgent] = useState("");
     const [assignAgent, setAssignAgent] = useState({"isOpen":false, "donation":{}});
 
     useEffect(() => {
@@ -38,11 +37,12 @@ const AssignAgents = () => {
                     <table className="mx-auto overflow-auto border-2 border-black">
                         <thead>
                             <tr className="bg-gray-400">
+                                <th className="border-2 border-black p-3">Donor</th>
                                 <th className="border-2 border-black p-3">Food Name</th>
                                 <th className="border-2 border-black p-3">Food Quantity</th>
                                 <th className="border-2 border-black p-3">Address</th>
                                 <th className="border-2 border-black p-3">Status</th>
-                                <th className="border-2 border-black p-3">Assign Agent</th>
+                                <th className="border-2 border-black p-3">Agent</th>
                                 <th className="border-2 border-black p-3">Message from Donor</th>
                                 <th className="border-2 border-black p-3">Message to Agent</th>
                             </tr>
@@ -54,30 +54,25 @@ const AssignAgents = () => {
                                 </tr>
                             )}
                             {donations.map((donation, index) => (
-                                <tr key={index} className={` ${index % 2 == 0 ? "bg-gray-300" : "bg-white"} `}>
+                                <tr key={index} className={` ${index % 2 === 0 ? "bg-gray-300" : "bg-white"} `}>
+                                    <td className="border border-black text-center p-3">{donation.donor.name}</td>
                                     <td className="border border-black text-center p-3">{donation.foodName}</td>
                                     <td className="border border-black text-center p-3">{donation.foodQuantity} KG</td>
                                     <td className="border border-black text-center p-3">{donation.address}</td>
-                                    <td className="border border-black text-center p-3">{donation.status}</td>
-                                    <td className="border border-black text-center p-3">
+                                    <td className={`border border-black text-center p-3 
+                                    ${donation.status === "accepted"? "bg-green-400" : donation.status === "rejected" ? "bg-red-400" : "bg-yellow-400" }`}>
+                                        {donation.status}
+                                    </td>
+                                    <td className={`border border-black text-center p-3 
+                                    ${donation.status === "accepted"? "bg-green-400" : donation.status === "rejected" ? "bg-red-400" : donation.status==="pending"? "bg-white":"bg-yellow-400" }`}>
                                         {donation.agent ? (
-                                            <p className="text-green-500">Assigned</p>
+                                            <p>
+                                                {donation.status==="accepted" && <span className="bg-green-400 px-2 py-1 rounded-md ml-2">Accepted by {donation.agent.name}</span>}
+                                                {donation.status==="rejected" && <span className="bg-red-400 px-2 py-1 rounded-md ml-2">Rejected by {donation.agent.name} <button className="bg-blue-500 text-white px-2 py-1 rounded-md ml-2" onClick={() => {handleAssignAgent(donation);}}>ReAssign</button> </span> }
+                                                {(donation.status==="pending" || donation.status==="assigned") && <span>Assigned to {donation.agent.name}</span>}
+                                            </p>
                                         ) : (
                                             <>
-                                                {/* <select
-                                                    name="agent"
-                                                    className="border-2 border-black rounded-md"
-                                                    onChange={(e) => setSelectedAgent(e.target.value)}
-                                                >
-                                                    <option selected disabled className="bg-gray-500 text-white">
-                                                        Select Agent
-                                                    </option>
-                                                    {agents.map((agent, index) => (
-                                                        <option key={index} value={agent._id}>
-                                                            {agent.name}
-                                                        </option>
-                                                    ))}
-                                                </select> */}
                                                 <button
                                                     className="bg-blue-500 text-white px-2 py-1 rounded-md ml-2"
                                                     onClick={() => {
@@ -95,7 +90,7 @@ const AssignAgents = () => {
                             ))}
                         </tbody>
                     </table>
-                    <AssignAgent isOpen={assignAgent.isOpen} donation={assignAgent.donation} agents={agents} onClose={()=> setAssignAgent(false)} />
+                    <AssignAgent isOpen={assignAgent.isOpen} donation={assignAgent.donation} agents={agents} onClose={()=> setAssignAgent({"isOpen": false})} />
                 </div>
             ) : (
                 <Error showError={showError} error={{ message: "Login as Admin to continue" }} onClose={() => setShowError(false)} />

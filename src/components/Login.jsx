@@ -42,6 +42,7 @@ const Login = () => {
                 else {
                     setError(data);
                     setShowLoginError(true);
+                    setShowLoader(false);
                 }
             })
     }
